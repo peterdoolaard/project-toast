@@ -3,21 +3,31 @@ import React, { useState } from 'react';
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
+import Toast from "../Toast";
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('notice');
+  const [showToast, setShowToast] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setShowToast(true);
+  }
 
   return (
+      <>
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
 
-      <form className={styles.controlsWrapper}>
+      {showToast && <Toast message={message} variant={variant} setShowToast={setShowToast} />}
+
+      <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -63,6 +73,7 @@ function ToastPlayground() {
         </div>
       </form>
     </div>
+      </>
   );
 }
 
