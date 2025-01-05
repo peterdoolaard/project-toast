@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const ToastContext = createContext(null);
 
@@ -22,10 +22,26 @@ function ToastProvider({ children }) {
     event.target.reset();
   };
 
+  useEffect(() => {
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setToastList([]);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setToastList([]);
+        }
+      });
+    };
+  }, []);
+
 
   const value = { toastList, setToastList, message, setMessage, variant, setVariant, handleSubmit };
 
-  return <ToastContext.Provider  value={value}>{children}</ToastContext.Provider>;
+  return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 }
 
 export default ToastProvider;
