@@ -1,4 +1,6 @@
 import React from 'react';
+import { ToastContext} from '../ToastProvider';
+
 import {
   AlertOctagon,
   AlertTriangle,
@@ -19,8 +21,15 @@ const ICONS_BY_VARIANT = {
 };
 
 
-function Toast({ message, variant, setShowToast }) {
+function Toast({ children, variant, id }) {
   const Icon = ICONS_BY_VARIANT[variant];
+  const { toastList, setToastList } = React.useContext(ToastContext);
+
+  const dismissToast = (id) => {
+    const newToastList = toastList.filter((toast) => toast.id !== id);
+    setToastList(newToastList);
+  }
+
 
   return (
     <div className={`${styles.toast} ${styles[variant]}`}>
@@ -28,10 +37,10 @@ function Toast({ message, variant, setShowToast }) {
         <Icon size={24} />
       </div>
       <p className={styles.content}>
-          {message}
+          {children}
       </p>
       <button className={styles.closeButton}>
-        <X size={24} onClick={() => setShowToast(false)}/>
+        <X size={24} onClick={() => dismissToast(id)}/>
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
